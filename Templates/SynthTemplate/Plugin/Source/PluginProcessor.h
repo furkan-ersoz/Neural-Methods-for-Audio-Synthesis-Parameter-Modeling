@@ -1,13 +1,13 @@
 #pragma once
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "../../AudioEngine/SynthEngineTemplate.h"
+#include "InferenceEngine.h"
 
 class SynthTemplateProcessor : public juce::AudioProcessor {
 public:
     SynthTemplateProcessor();
     ~SynthTemplateProcessor() override = default;
 
-    // --- JUCE zorunlu override'lar ---
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void releaseResources() override {}
     void processBlock(juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
@@ -29,19 +29,23 @@ public:
     void getStateInformation(juce::MemoryBlock&) override {}
     void setStateInformation(const void*, int) override {}
 
-    // DataGenerator ve Editor buradan parametrelere erişir
     juce::AudioProcessorValueTreeState& getAPVTS() { return apvts_; }
+    SynthTemplate::InferenceEngine&     getInferenceEngine() { return inferenceEngine_; }
+
+    // Inference sonucu parametreleri APVTS'e yaz — GUI thread'den cagrilir
+    void applyInferenceResult(const std::vector<float>& params);
 
 private:
-    SynthTemplate::SynthEngine engine_;
+    SynthTemplate::SynthEngine        engine_;
+    SynthTemplate::InferenceEngine    inferenceEngine_;
     juce::AudioProcessorValueTreeState apvts_;
 
-    // MIDI note tracking
-    bool noteOn_  = false;
+    bool noteOn_   = false;
     int  midiNote_ = 60;
 
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     void syncEngineFromAPVTS();
+    juce::File findModelFile() const;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SynthTemplateProcessor)
 };

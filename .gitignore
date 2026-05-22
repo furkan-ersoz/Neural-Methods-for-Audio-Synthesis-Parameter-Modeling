@@ -7,3 +7,5 @@ __pycache__/
 *.a
 literature/Papers/
 literature/Papers/
+._*
+.feature_cache/

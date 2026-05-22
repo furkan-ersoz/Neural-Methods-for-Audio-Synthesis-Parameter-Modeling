@@ -1,0 +1,66 @@
+# ── Experiment Config ─────────────────────────────────────────────────────────
+# Her Exp### klasörü bu dosyayı içerir.
+# train.py, evaluate.py, export_onnx.py hepsi buradan okur.
+
+experiment:
+  name: Exp001
+  synth: SynthV1                         # hangi synth
+  synth_root: ../                        # synths/SynthV1/ klasörüne göre relatif
+
+# ── Dataset ───────────────────────────────────────────────────────────────────
+dataset:
+  path: ../datasets/S01D01              # relatif — synths/SynthV1/ bazlı
+  params: [attack, decay, sustain, release]
+  train_ratio: 0.8
+  val_ratio:   0.1
+  test_ratio:  0.1
+  seed: 42
+
+# ── Feature Extraction ────────────────────────────────────────────────────────
+features:
+  type: mel_spectrogram                 # mel_spectrogram | mfcc | stft
+  sample_rate: 44100
+  n_mels: 128                           # mel_spectrogram / mfcc için
+  n_mfcc: 40                            # sadece mfcc için
+  n_fft: 2048
+  hop_length: 512
+  normalize: true                       # per-feature z-score normalizasyonu
+  cache: true                           # .npy olarak önbelleğe al
+
+# ── Model ─────────────────────────────────────────────────────────────────────
+model:
+  class: Model001                       # NeuralNetworks/models/model001.py
+  # Model001'e özgü parametreler:
+  input_dim: 128
+  cnn_channels: [32, 64, 128]
+  gru_hidden: 256
+  gru_layers: 2
+  fc_hidden: 128
+  dropout: 0.2
+
+# ── Training ──────────────────────────────────────────────────────────────────
+training:
+  epochs: 100
+  batch_size: 32
+  learning_rate: 0.001
+  optimizer: adam                       # adam | sgd
+  loss: mse                             # mse | log_mse | weighted_mse
+  loss_weights: [1.0, 1.0, 1.0, 1.0]  # weighted_mse için param ağırlıkları
+  early_stopping:
+    patience: 10
+    monitor: val_loss
+  checkpoint:
+    save_best: true
+    save_last: true
+
+# ── Evaluation ────────────────────────────────────────────────────────────────
+evaluation:
+  metrics: [mse, mae, r2]
+  plot: true
+
+# ── Export ────────────────────────────────────────────────────────────────────
+export:
+  format: onnx                          # onnx | torchscript
+  output_dir: ../exports               # synths/SynthV1/exports/
+  filename: Exp001_Model001            # .onnx uzantısı otomatik eklenir
+  opset_version: 17
