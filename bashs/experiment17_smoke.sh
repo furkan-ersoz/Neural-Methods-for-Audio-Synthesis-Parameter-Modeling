@@ -32,18 +32,20 @@ echo "  Dataset  : $DS_NAME (n=$N, seed=$SEED)"
 echo "  Epochs   : $EPOCHS  |  Patience: $PATIENCE"
 echo "=============================================="
 
-# Smoke config: smoke dataseti kullanmak icin gecici env var
-# (config.yaml'daki dataset.path'i runtime'da override ediyoruz)
-# Not: training scriptleri cfg["dataset"]["path"] okuyor; bunu dogrudan
-# config'e yazmak yerine, gecici bir override config dosyasi kullaniyoruz.
-SMOKE_CONFIG="$EXP_DIR/config_smoke.yaml"
+# KRITIK: smoke ciktilarini (log/checkpoint/export) GERCEK Exp017'den izole et.
+# Egitim scriptleri _exp_dir'i config'in bulundugu klasorden turetir; bu yuzden
+# smoke config'i AYRI bir Exp017_smoke/ klasorune yaziyoruz. Boylece smoke,
+# tam run'in Exp017/logs ve Exp017/checkpoints klasorlerine asla dokunmaz.
+SMOKE_EXP_DIR="$ROOT/synths/SynthV3/Experiments/Exp017_smoke"
+mkdir -p "$SMOKE_EXP_DIR"
+SMOKE_CONFIG="$SMOKE_EXP_DIR/config.yaml"
 python3 - <<PYEOF
-import yaml, copy
+import yaml
 with open("$SYNTH_CONFIG") as f:
     cfg = yaml.safe_load(f)
+cfg["experiment"]["name"] = "Exp017_smoke"
 cfg["dataset"]["path"] = "datasets/$DS_NAME"
-cfg["experiment"]["notes"] = "SMOKE TEST — gecici, silinebilir."
-# Log/ckpt'lerin smoke klasorune gitmesi icin exp_name degistir
+cfg["experiment"]["notes"] = "SMOKE TEST — gecici, silinebilir. Gercek Exp017'den izole."
 with open("$SMOKE_CONFIG", "w") as f:
     yaml.dump(cfg, f, allow_unicode=True)
 print("Smoke config yazildi: $SMOKE_CONFIG")
@@ -108,10 +110,10 @@ $PYTHON sequenced_export_onnx.py --config "$SMOKE_CONFIG" --frame osc_a
 echo ""
 echo "=============================================="
 echo "  SMOKE TEST GECTI"
-echo "  ONNX: $EXP_DIR/exports/"
+echo "  ONNX: $SMOKE_EXP_DIR/exports/"
 echo "  Simdi tam run icin:"
 echo "    bash bashs/experiment17_bash.sh"
+echo ""
+echo "  Smoke artifaktlarini temizlemek icin:"
+echo "    rm -rf $SMOKE_EXP_DIR $DS_DIR"
 echo "=============================================="
-
-# Gecici smoke config'i temizle
-rm -f "$SMOKE_CONFIG"
