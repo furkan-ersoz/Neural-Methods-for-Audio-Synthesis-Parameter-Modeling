@@ -1,0 +1,20 @@
+synth:        SynthV3
+profile:      OscAOnly
+n:            5000
+seed:         77
+max_duration: 4.0
+output_dir:   ../../synths/SynthV3/datasets
+
+frames:
+  osc_a:   true
+  osc_b:   false
+  noise:   false
+  filter:  false
+  env1:    false
+  env2:    false
+  lfo1:    false
+  lfo2:    false
+  lfo3:    false
+  lfo4:    false
+  reverb:  false
+  delay:   false

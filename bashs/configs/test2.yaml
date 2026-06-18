@@ -1,0 +1,12 @@
+datagen:
+  config:    ../DataGenerator/configs/datagen_base.yaml
+  n:         20000
+  seed:      123
+
+train:
+  synth:     SynthV3
+  exp:       Exp001
+
+git:
+  push:      true
+  message:   "test2: 20k samples, seed 123"

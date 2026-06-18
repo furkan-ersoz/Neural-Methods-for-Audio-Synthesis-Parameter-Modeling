@@ -1,0 +1,50 @@
+# Build
+cmake-build-*/
+**/build/
+**/.cmake/
+**/CMakeFiles/
+*.out
+*.a.out
+
+# Python
+__pycache__/
+*.pyc
+.feature_cache/
+*.png
+
+# Dataset — WAV dosyaları çok büyük
+datasets/
+**/datasets/
+**/S0*/
+*.wav
+*.mp3
+*.aiff
+**/samples/
+**/samples_full/
+**/spectrograms/
+
+# IDE
+.idea/
+.vscode/
+*.user
+build/
+._*
+.DS_Store
+
+# Model weights & exports
+*.bak
+
+# Claude project files
+.claude/
+
+# Experiment checkpoints (RunPod'da yeniden üretilecek)
+# Exp015 / Exp016 modelleri commit edilir; digerleri ignore.
+**/checkpoints/
+!synths/SynthV3/Experiments/Exp015/checkpoints/
+!synths/SynthV3/Experiments/Exp015/checkpoints/**
+!synths/SynthV3/Experiments/Exp016/checkpoints/
+!synths/SynthV3/Experiments/Exp016/checkpoints/**
+
+*.pt
+*.npy
+DataGenerator/configs/S01D*/
