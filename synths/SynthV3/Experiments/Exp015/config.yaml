@@ -1,0 +1,256 @@
+---
+
+experiment:
+  name: "Exp015"
+  synth_root: "../../"
+  pipeline: "sequenced"
+  notes: >
+    Z-score normalizasyonu kaldirildi. Yalnizca ref=1.0 ile dB donusumu
+    uygulanir; per-file z-score spektral denge ve seviye bilgisini
+    siliyordu.
+
+dataset:
+  path: "datasets/S03D15"
+  train_ratio: 0.80
+  val_ratio:   0.10
+  seed:        42
+
+features:
+  type:           mel_spectrogram
+  sample_rate:    44100
+  n_mels:         128
+  n_fft:          2048
+  hop_length:     512
+  cache:          true
+
+model:
+  model_version:  model011
+  pool_mode:      stats
+  temporal:       none
+  continuous_mode: regression
+  n_bins:         32
+  audio_channels: 1
+  per_param_loss_weight: true
+  cnn_channels:   [32, 64, 128]
+  cond_dim:       64
+  fc_hidden:      256
+  dropout:        0.3
+
+conditioning:
+  dropout_p:       0.30
+  teacher_forcing: true
+
+door:
+  model_file:           model012
+  use_lfo_class_weights: true
+  bypass_columns:
+    - bypass_osc_b
+    - bypass_noise
+    - bypass_filter
+    - bypass_reverb
+    - bypass_delay
+  lfo_count_column:  active_lfo_count
+  lfo_count_classes: 5
+  loss_weights:
+    bypass:    1.0
+    lfo_count: 1.0
+
+frames:
+  - name:          osc_a
+    model_file:    model011
+    frame_index:   1
+    always_active: true
+    wav_column:    filename_frame01
+    params:
+      - osc_a_waveform
+      - osc_a_warp_amt
+      - osc_a_warp_type
+      - osc_a_detune
+      - osc_a_blend
+      - osc_a_pitch_coarse
+      - osc_a_pitch_fine
+      - osc_a_level
+      - osc_a_harmonic2
+      - osc_a_harmonic3
+    categorical_params:
+      osc_a_warp_type: [sync, fm, rm, fold]
+
+  - name:          osc_b
+    model_file:    model011
+    frame_index:   2
+    bypass_column: bypass_osc_b
+    wav_column:    filename_frame02
+    params:
+      - osc_b_waveform
+      - osc_b_warp_amt
+      - osc_b_warp_type
+      - osc_b_detune
+      - osc_b_blend
+      - osc_b_pitch_coarse
+      - osc_b_pitch_fine
+      - osc_b_level
+      - osc_b_phase
+      - osc_b_semitone_ofs
+    categorical_params:
+      osc_b_warp_type: [sync, fm, rm, fold]
+
+  - name:          noise
+    model_file:    model011
+    frame_index:   3
+    bypass_column: bypass_noise
+    wav_column:    filename_frame03
+    params:
+      - noise_color
+      - noise_level
+      - noise_stereo
+    categorical_params:
+      noise_color: [white, pink, brown]
+
+  - name:          filter
+    model_file:    model011
+    frame_index:   4
+    bypass_column: bypass_filter
+    wav_column:    filename_frame04
+    params:
+      - filter_cutoff
+      - filter_resonance
+      - filter_type
+      - filter_drive
+      - filter_keytrack
+      - filter_env_amt
+    categorical_params:
+      filter_type: [lp12, lp24, hp12, hp24, bp]
+
+  - name:          env1
+    model_file:    model011
+    frame_index:   5
+    always_active: true
+    wav_column:    filename_frame05
+    params:
+      - env1_attack
+      - env1_hold
+      - env1_decay
+      - env1_sustain
+      - env1_release
+      - env1_atk_curve
+      - env1_dec_curve
+
+  - name:          env2
+    model_file:    model011
+    frame_index:   6
+    bypass_column: bypass_osc_b
+    wav_column:    filename_frame06
+    params:
+      - env2_attack
+      - env2_hold
+      - env2_decay
+      - env2_sustain
+      - env2_release
+      - env2_atk_curve
+      - env2_dec_curve
+
+  - name:         lfo1
+    model_file:   model011
+    frame_index:  7
+    lfo_index:    1
+    wav_column:   filename_frame07
+    params:
+      - lfo1_rate
+      - lfo1_depth
+      - lfo1_shape
+      - lfo1_target
+    categorical_params:
+      lfo1_shape:  [sine, triangle, saw, square]
+      lfo1_target: [pitch, filter_cutoff, level, warp]
+
+  - name:         lfo2
+    model_file:   model011
+    frame_index:  8
+    lfo_index:    2
+    wav_column:   filename_frame08
+    params:
+      - lfo2_rate
+      - lfo2_depth
+      - lfo2_shape
+      - lfo2_target
+    categorical_params:
+      lfo2_shape:  [sine, triangle, saw, square]
+      lfo2_target: [pitch, filter_cutoff, level, warp]
+
+  - name:         lfo3
+    model_file:   model011
+    frame_index:  9
+    lfo_index:    3
+    wav_column:   filename_frame09
+    params:
+      - lfo3_rate
+      - lfo3_depth
+      - lfo3_shape
+      - lfo3_target
+    categorical_params:
+      lfo3_shape:  [sine, triangle, saw, square]
+      lfo3_target: [pitch, filter_cutoff, level, warp]
+
+  - name:         lfo4
+    model_file:   model011
+    frame_index:  10
+    lfo_index:    4
+    wav_column:   filename_frame10
+    params:
+      - lfo4_rate
+      - lfo4_depth
+      - lfo4_shape
+      - lfo4_target
+    categorical_params:
+      lfo4_shape:  [sine, triangle, saw, square]
+      lfo4_target: [pitch, filter_cutoff, level, warp]
+
+  - name:          reverb
+    model_file:    model011
+    frame_index:   11
+    bypass_column: bypass_reverb
+    wav_column:    filename_frame11
+    params:
+      - reverb_size
+      - reverb_decay
+      - reverb_damping
+      - reverb_predelay
+      - reverb_mix
+      - reverb_width
+    categorical_params: {}
+
+  - name:          delay
+    model_file:    model011
+    frame_index:   12
+    bypass_column: bypass_delay
+    wav_column:    filename_frame12
+    params:
+      - delay_time_l
+      - delay_time_r
+      - delay_feedback
+      - delay_filter_cutoff
+      - delay_mix
+    categorical_params: {}
+
+training:
+  epochs:        300
+  batch_size:    32
+  learning_rate: 0.001
+  optimizer:     adam
+  num_workers:   8
+  lr_scheduler:  cosine
+  grad_clip:     1.0
+  loss:
+    continuous:  mse
+    categorical: cross_entropy
+    cat_weight:  1.0
+  checkpoint:
+    save_best: true
+    save_last: true
+  early_stopping:
+    patience: 40
+
+export:
+  auto_export:   true
+  output_dir:    "exports"
+  opset_version: 17

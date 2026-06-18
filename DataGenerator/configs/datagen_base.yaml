@@ -1,0 +1,23 @@
+# DataGenerator CLI — base config
+# test*.yaml dosyaları bu dosyayı override eder
+
+synth:        SynthV3
+profile:      DataGeneration
+n:            20000
+seed:         42
+max_duration: 4.0
+output_dir: ../../synths/SynthV3/datasets
+
+frames:
+  osc_a:   true
+  osc_b:   true
+  noise:   true
+  filter:  true
+  env1:    true
+  env2:    true
+  lfo1:    true
+  lfo2:    true
+  lfo3:    true
+  lfo4:    true
+  reverb:  true
+  delay:   true

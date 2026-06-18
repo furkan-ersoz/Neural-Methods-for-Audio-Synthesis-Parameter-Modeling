@@ -1,0 +1,22 @@
+# DataGeneratorCLI config — P3b noise_stereo verification (n=50)
+synth:        SynthV3
+profile:      DataGeneration
+n:            50
+seed:         314
+max_duration: 4.0
+num_workers: 8
+output_dir:   ../../synths/SynthV3/datasets
+
+frames:
+  osc_a:   true
+  osc_b:   true
+  noise:   true
+  filter:  true
+  env1:    true
+  env2:    true
+  lfo1:    true
+  lfo2:    true
+  lfo3:    true
+  lfo4:    true
+  reverb:  true
+  delay:   true

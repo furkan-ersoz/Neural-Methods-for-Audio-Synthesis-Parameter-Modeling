@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "experiment": "Exp010",
+    "dataset_path": "datasets/S03D01",
+    "config_hash": "17509b61",
+    "evaluated_at": "2026-06-17T21:08:20.738450",
+    "frame": "osc_a"
+  },
+  "frames": {
+    "osc_a": {
+      "val_loss": 0.033436574130540804,
+      "mse_per_param": {
+        "osc_a_waveform": 0.024560177698731422,
+        "osc_a_warp_amt": 0.051217660307884216,
+        "osc_a_warp_type": 0.023850567638874054,
+        "osc_a_detune": 0.036015577614307404,
+        "osc_a_blend": 0.014424987137317657,
+        "osc_a_pitch_coarse": 0.0027034974191337824,
+        "osc_a_pitch_fine": 0.08394184708595276,
+        "osc_a_level": 0.014659934677183628,
+        "osc_a_harmonic2": 0.04156027361750603,
+        "osc_a_harmonic3": 0.04114050418138504
+      },
+      "mae_per_param": {
+        "osc_a_waveform": 0.11884475499391556,
+        "osc_a_warp_amt": 0.1806558221578598,
+        "osc_a_warp_type": 0.08408984541893005,
+        "osc_a_detune": 0.12997958064079285,
+        "osc_a_blend": 0.08492576330900192,
+        "osc_a_pitch_coarse": 0.039110634475946426,
+        "osc_a_pitch_fine": 0.251315712928772,
+        "osc_a_level": 0.10042387992143631,
+        "osc_a_harmonic2": 0.15994027256965637,
+        "osc_a_harmonic3": 0.16122309863567352
+      },
+      "overall_mse": 0.03340750187635422,
+      "overall_mae": 0.1310509294271469,
+      "training": {
+        "epochs_run": 196,
+        "best_epoch": 156,
+        "best_val_loss": 0.03246742251515389,
+        "dataset_size": 18000,
+        "hyperparameters": {
+          "learning_rate": 0.001,
+          "batch_size": 32,
+          "dropout": 0.2,
+          "patience": 40,
+          "lr_scheduler": "plateau",
+          "grad_clip": 1.0
+        },
+        "hardware": {
+          "device": "cuda"
+        }
+      }
+    }
+  }
+}

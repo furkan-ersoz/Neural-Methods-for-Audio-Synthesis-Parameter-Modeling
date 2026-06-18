@@ -1,0 +1,84 @@
+---
+
+experiment:
+  name: "Exp010"
+  tag:  "exp03-sanity"
+  synth_root: "../../"
+  pipeline: "sequenced"
+  notes: >
+    Sanity check — osc_a only, 5k samples, pure MSE regression.
+    Amac: modelin en basit haliyle ogrendigini dogrulamak.
+    Kategorik yok, sequenced zincir yok, prev_params yok.
+    Zero-padding ve normalizasyon duzeltmeleri aktif (fix1+fix4).
+
+dataset:
+  path: "datasets/S03D01"
+  train_ratio: 0.80
+  val_ratio:   0.10
+  seed:        42
+
+features:
+  type:        mel_spectrogram
+  sample_rate: 44100
+  n_mels:      128
+  n_fft:       2048
+  hop_length:  512
+  cache:       true
+  normalize:   true
+  num_workers: 4
+
+model:
+  model_version:   model011
+  pool_mode:       stats
+  temporal:        none
+  continuous_mode: regression
+  audio_channels:  1
+  per_param_loss_weight: false
+  cnn_channels:    [32, 64, 128]
+  cond_dim:        64
+  fc_hidden:       256
+  dropout:         0.2
+
+conditioning:
+  dropout_p: 0.0
+
+frames:
+  - name:          osc_a
+    model_file:    model011
+    frame_index:   1
+    always_active: true
+    wav_column:    filename_frame01
+    params:
+      - osc_a_waveform
+      - osc_a_warp_amt
+      - osc_a_warp_type
+      - osc_a_detune
+      - osc_a_blend
+      - osc_a_pitch_coarse
+      - osc_a_pitch_fine
+      - osc_a_level
+      - osc_a_harmonic2
+      - osc_a_harmonic3
+    categorical_params: {}
+
+training:
+  epochs:        60
+  batch_size:    32
+  learning_rate: 0.001
+  optimizer:     adam
+  num_workers:   0
+  lr_scheduler:  plateau
+  grad_clip:     1.0
+  loss:
+    continuous:  mse
+    cat_weight:  1.0
+  checkpoint:
+    save_best: true
+    save_last: true
+  early_stopping:
+    patience: 20
+
+export:
+  auto_export:   false
+  output_dir:    "exports"
+  opset_version: 17

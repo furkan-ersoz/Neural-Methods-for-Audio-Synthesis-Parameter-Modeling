@@ -1,0 +1,13 @@
+# test1: 20k örnek, DataGeneration profili, SynthV3 Exp001
+datagen:
+  config:    ../DataGenerator/configs/datagen_base.yaml
+  n:         20000
+  seed:      42
+
+train:
+  synth:     SynthV3
+  exp:       Exp001
+
+git:
+  push:      true
+  message:   "test1: 20k samples, DataGeneration profile"

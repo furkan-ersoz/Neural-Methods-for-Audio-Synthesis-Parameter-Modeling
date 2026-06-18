@@ -1,0 +1,3 @@
+add_library(SharedHeaders INTERFACE)
+target_include_directories(SharedHeaders INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_compile_features(SharedHeaders INTERFACE cxx_std_17)

@@ -1,0 +1,24 @@
+# DataGeneratorCLI config — smoke test (n=5)
+# Sampling rules defined in Shared/SamplingProfiles/Profiles/DataGeneration.h
+
+synth:        SynthV3
+profile:      DataGeneration
+n:            5
+seed:         99
+max_duration: 4.0
+num_workers: 32
+output_dir:   ../../synths/SynthV3/datasets
+
+frames:
+  osc_a:   true
+  osc_b:   true
+  noise:   true
+  filter:  true
+  env1:    true
+  env2:    true
+  lfo1:    true
+  lfo2:    true
+  lfo3:    true
+  lfo4:    true
+  reverb:  true
+  delay:   true
