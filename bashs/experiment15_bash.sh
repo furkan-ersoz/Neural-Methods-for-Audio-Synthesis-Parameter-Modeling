@@ -109,7 +109,6 @@ if [ -f "$EXP_DIR/logs/door/train_log.json" ]; then
 else
     echo ">>> door (classification) egitiliyor..."
     $PYTHON sequenced_train_door.py --config "$SYNTH_CONFIG"
-    git_save "Exp015: door (classification) trained"
 fi
 
 # ── 4. Sirali egitim: 12 frame TEK TEK ────────────────────────────────────────
@@ -120,14 +119,15 @@ for FRAME in "${FRAMES[@]}"; do
     fi
     echo ">>> $FRAME egitiliyor..."
     $PYTHON sequenced_train_frames.py --config "$SYNTH_CONFIG" --frame "$FRAME"
-    git_save "Exp015: frame '$FRAME' trained"
 done
 
 # ── 5. Validation / evaluation (door + tum frameler) ──────────────────────────
 echo ""
 echo "--- [5] Evaluation ---"
 $PYTHON sequenced_evaluate.py --config "$SYNTH_CONFIG"
-git_save "Exp015: evaluation results"
+
+# ── Tek seferlik commit + push (yalnizca en sonda) ────────────────────────────
+git_save "Exp015: full sequenced run (main_render=frame) + evaluation"
 
 echo ""
 echo "  Dataset     : $DS_DIR/"
