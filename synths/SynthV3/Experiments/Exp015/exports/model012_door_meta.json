@@ -1,0 +1,22 @@
+{
+  "frame_name": "door",
+  "model_file": "model012",
+  "input_names": [
+    "mel_full"
+  ],
+  "output_names": [
+    "bypass_flags",
+    "lfo_count_logits"
+  ],
+  "n_mels": 128,
+  "prev_params_dim": 0,
+  "bypass_columns": [
+    "bypass_osc_b",
+    "bypass_noise",
+    "bypass_filter",
+    "bypass_reverb",
+    "bypass_delay"
+  ],
+  "lfo_count_classes": 5,
+  "opset_version": 17
+}

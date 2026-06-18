@@ -1,0 +1,36 @@
+{
+  "frame_name": "osc_a",
+  "model_file": "model011",
+  "input_names": [
+    "mel_full",
+    "mel_prev",
+    "prev_params"
+  ],
+  "output_names": [
+    "continuous_out",
+    "cat_osc_a_warp_type"
+  ],
+  "n_mels": 128,
+  "prev_params_dim": 0,
+  "continuous_params": [
+    "osc_a_waveform",
+    "osc_a_warp_amt",
+    "osc_a_warp_type",
+    "osc_a_detune",
+    "osc_a_blend",
+    "osc_a_pitch_coarse",
+    "osc_a_pitch_fine",
+    "osc_a_level",
+    "osc_a_harmonic2",
+    "osc_a_harmonic3"
+  ],
+  "categorical_params": {
+    "osc_a_warp_type": [
+      "sync",
+      "fm",
+      "rm",
+      "fold"
+    ]
+  },
+  "opset_version": 17
+}
