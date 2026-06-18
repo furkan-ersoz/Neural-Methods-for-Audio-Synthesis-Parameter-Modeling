@@ -2,6 +2,12 @@
 # experiment15_bash.sh — Exp015: FULL sequential training (door + 12 frames), 20k samples
 # RunPod/remote. Tek scriptte: veri uretimi -> feature extraction -> sirali egitim -> eval.
 #
+# NOT (Exp010 hizalamasi): tum ogrenme hiperparametreleri Exp015/config.yaml'dan
+#   okunur (bu script override BAYRAGI gecmez). Config artik 010'un bilinen-iyi
+#   ayarlarini birebir tasir: normalize=true, dropout=0.2, dropout_p=0.0,
+#   per_param_loss_weight=false, lr_scheduler=plateau, epochs=300, patience=40,
+#   tum frame'lerde categorical_params={} (saf continuous regresyon).
+#
 # SIRALI EGITIM (kritik): once door (classification), sonra 12 frame TEK TEK (paralel DEGIL).
 # RESUME: ayni scripti tekrar calistirinca kaldigi yerden devam eder
 #   - dataset varsa  -> generation atlanir

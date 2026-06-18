@@ -5,9 +5,17 @@ experiment:
   synth_root: "../../"
   pipeline: "sequenced"
   notes: >
-    Z-score normalizasyonu kaldirildi. Yalnizca ref=1.0 ile dB donusumu
-    uygulanir; per-file z-score spektral denge ve seviye bilgisini
-    siliyordu.
+    Exp010 ayarlari BIREBIR sequenced tam zincire (door + 12 frame) uygulandi.
+    Amac: 010'da ogrenen kurulumun confounder'larini notrleyerek 015'in neden
+    random baseline'da kaldigini izole etmek.
+    010'a hizalananlar:
+      features.normalize = true (acikca)
+      model.dropout = 0.2, per_param_loss_weight = false, n_bins kaldirildi
+      conditioning.dropout_p = 0.0, teacher_forcing kaldirildi
+      training: epochs 60, lr_scheduler plateau, patience 20, auto_export false
+      tum frame'lerde categorical_params = {} (010'da warp_type continuous regrese
+        edilip ogrenilmisti); kategorik kafalar devre disi, saf continuous regresyon
+    Yapisal olarak korunan: 12-frame sirali zincir + door classifier (pipeline amaci).
 
 dataset:
   path: "datasets/S03D15"
@@ -16,29 +24,33 @@ dataset:
   seed:        42
 
 features:
-  type:           mel_spectrogram
-  sample_rate:    44100
-  n_mels:         128
-  n_fft:          2048
-  hop_length:     512
-  cache:          true
+  type:        mel_spectrogram
+  sample_rate: 44100
+  n_mels:      128
+  n_fft:       2048
+  hop_length:  512
+  cache:       true
+  normalize:   true
+  num_workers: 4
 
 model:
-  model_version:  model011
-  pool_mode:      stats
-  temporal:       none
+  model_version:   model011
+  pool_mode:       stats
+  temporal:        none
   continuous_mode: regression
-  n_bins:         32
-  audio_channels: 1
-  per_param_loss_weight: true
-  cnn_channels:   [32, 64, 128]
-  cond_dim:       64
-  fc_hidden:      256
-  dropout:        0.3
+  audio_channels:  1
+  per_param_loss_weight: false
+  cnn_channels:    [32, 64, 128]
+  cond_dim:        64
+  fc_hidden:       256
+  dropout:         0.2
 
 conditioning:
-  dropout_p:       0.30
-  teacher_forcing: true
+  dropout_p:   0.0
+  # Ana mel girdisi: "frame" = bu katmana kadarki kumulatif render (residual ogrenme).
+  # "onceki katmana kadarki ses" zaten mel_prev olarak, "onceki parametreler" prev_params
+  # olarak geliyor. "full" tam mix'e (blind/endustriyel) geri donduurur.
+  main_render: frame
 
 door:
   model_file:           model012
@@ -72,8 +84,7 @@ frames:
       - osc_a_level
       - osc_a_harmonic2
       - osc_a_harmonic3
-    categorical_params:
-      osc_a_warp_type: [sync, fm, rm, fold]
+    categorical_params: {}
 
   - name:          osc_b
     model_file:    model011
@@ -91,8 +102,7 @@ frames:
       - osc_b_level
       - osc_b_phase
       - osc_b_semitone_ofs
-    categorical_params:
-      osc_b_warp_type: [sync, fm, rm, fold]
+    categorical_params: {}
 
   - name:          noise
     model_file:    model011
@@ -103,8 +113,7 @@ frames:
       - noise_color
       - noise_level
       - noise_stereo
-    categorical_params:
-      noise_color: [white, pink, brown]
+    categorical_params: {}
 
   - name:          filter
     model_file:    model011
@@ -118,8 +127,7 @@ frames:
       - filter_drive
       - filter_keytrack
       - filter_env_amt
-    categorical_params:
-      filter_type: [lp12, lp24, hp12, hp24, bp]
+    categorical_params: {}
 
   - name:          env1
     model_file:    model011
@@ -134,6 +142,7 @@ frames:
       - env1_release
       - env1_atk_curve
       - env1_dec_curve
+    categorical_params: {}
 
   - name:          env2
     model_file:    model011
@@ -148,6 +157,7 @@ frames:
       - env2_release
       - env2_atk_curve
       - env2_dec_curve
+    categorical_params: {}
 
   - name:         lfo1
     model_file:   model011
@@ -159,9 +169,7 @@ frames:
       - lfo1_depth
       - lfo1_shape
       - lfo1_target
-    categorical_params:
-      lfo1_shape:  [sine, triangle, saw, square]
-      lfo1_target: [pitch, filter_cutoff, level, warp]
+    categorical_params: {}
 
   - name:         lfo2
     model_file:   model011
@@ -173,9 +181,7 @@ frames:
       - lfo2_depth
       - lfo2_shape
       - lfo2_target
-    categorical_params:
-      lfo2_shape:  [sine, triangle, saw, square]
-      lfo2_target: [pitch, filter_cutoff, level, warp]
+    categorical_params: {}
 
   - name:         lfo3
     model_file:   model011
@@ -187,9 +193,7 @@ frames:
       - lfo3_depth
       - lfo3_shape
       - lfo3_target
-    categorical_params:
-      lfo3_shape:  [sine, triangle, saw, square]
-      lfo3_target: [pitch, filter_cutoff, level, warp]
+    categorical_params: {}
 
   - name:         lfo4
     model_file:   model011
@@ -201,9 +205,7 @@ frames:
       - lfo4_depth
       - lfo4_shape
       - lfo4_target
-    categorical_params:
-      lfo4_shape:  [sine, triangle, saw, square]
-      lfo4_target: [pitch, filter_cutoff, level, warp]
+    categorical_params: {}
 
   - name:          reverb
     model_file:    model011
@@ -237,12 +239,11 @@ training:
   batch_size:    32
   learning_rate: 0.001
   optimizer:     adam
-  num_workers:   8
-  lr_scheduler:  cosine
+  num_workers:   4
+  lr_scheduler:  plateau
   grad_clip:     1.0
   loss:
     continuous:  mse
-    categorical: cross_entropy
     cat_weight:  1.0
   checkpoint:
     save_best: true
@@ -251,6 +252,6 @@ training:
     patience: 40
 
 export:
-  auto_export:   true
+  auto_export:   false
   output_dir:    "exports"
   opset_version: 17

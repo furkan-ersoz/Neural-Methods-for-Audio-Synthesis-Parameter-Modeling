@@ -342,6 +342,9 @@ class FrameDataset(Dataset):
         self.cache_dir   = cache_dir
         self.training    = training
         self.dropout_p   = cfg.get("conditioning", {}).get("dropout_p", 0.0)
+        # Ana mel kaynagi: "full" = tam mix (row["filename"]); "frame" = bu katmana
+        # kadarki kumulatif render (frame'in kendi wav_column'u). Geri donuk uyum: "full".
+        self.main_render = cfg.get("conditioning", {}).get("main_render", "full")
 
         if cache_dir:
             cache_dir.mkdir(parents=True, exist_ok=True)
@@ -358,11 +361,15 @@ class FrameDataset(Dataset):
         self.global_cat_map: Dict[str, List[str]] = build_global_cat_map(frames)
         self.prev_frames = frames[:self.frame_idx]
 
-        # Onceki frame WAV kolonu (varsa)
+        # Onceki frame WAV kolonu (varsa) — "onceki katmana kadarki ses" (mel_prev)
         self.prev_wav_col: Optional[str] = (
             frames[self.frame_idx - 1]["wav_column"]
             if self.frame_idx > 0 else None
         )
+
+        # Bu frame'in kendi (bu katmana kadarki kumulatif) render kolonu —
+        # main_render="frame" modunda ana mel girdisi olarak kullanilir.
+        self.own_wav_col: Optional[str] = self.frame_cfg.get("wav_column")
 
         # Onceki frame WAV boyutu (sifir tensor uretmek icin n_mels lazim)
         self.n_mels = feat_cfg.n_mels if feat_cfg.type == "mel_spectrogram" else (
@@ -388,10 +395,16 @@ class FrameDataset(Dataset):
     def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         row = self.rows[idx]
 
-        # ── Full mel ──────────────────────────────────────────────────────────
-        full_filename = row["filename"].strip()
+        # ── Ana mel ───────────────────────────────────────────────────────────
+        # main_render="full"  -> tam mix (row["filename"])            [blind/endustriyel]
+        # main_render="frame" -> bu katmana kadarki kumulatif render  [residual ogrenme]
+        if self.main_render == "frame" and self.own_wav_col:
+            main_filename = (row.get(self.own_wav_col, "").strip()
+                             or row["filename"].strip())
+        else:
+            main_filename = row["filename"].strip()
         mel_full = _load_features(
-            self.samples_dir / full_filename, self.feat_cfg, self.cache_dir,
+            self.samples_dir / main_filename, self.feat_cfg, self.cache_dir,
         )  # (n_mels, T)
 
         # ── Prev frame mel ────────────────────────────────────────────────────
