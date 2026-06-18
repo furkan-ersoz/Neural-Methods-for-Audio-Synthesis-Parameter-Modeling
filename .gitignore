@@ -54,3 +54,11 @@ build/
 **/build/
 ._*
 .DS_Store
+*.pdf
+*.PDF
+
+# Ignore all PDF documents
+*.pdf
+*.PDF
+**/*.pdf
+**/*.PDF
