@@ -371,6 +371,10 @@ class FrameDataset(Dataset):
         # main_render="frame" modunda ana mel girdisi olarak kullanilir.
         self.own_wav_col: Optional[str] = self.frame_cfg.get("wav_column")
 
+        # full_frame_hint: mel_full = tam mix, mel_prev = bu frame'in render'i (dropout ile perdeli)
+        if self.main_render == "full_frame_hint" and self.own_wav_col:
+            self.prev_wav_col = self.own_wav_col
+
         # Onceki frame WAV boyutu (sifir tensor uretmek icin n_mels lazim)
         self.n_mels = feat_cfg.n_mels if feat_cfg.type == "mel_spectrogram" else (
             feat_cfg.n_mfcc if feat_cfg.type == "mfcc" else

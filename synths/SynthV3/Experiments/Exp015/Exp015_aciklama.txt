@@ -1,0 +1,128 @@
+EXPERIMENT 015 — Açıklama
+=========================
+Tarih: 18 Haziran 2026
+Dataset: S03D15 (20.000 örnek, tüm modüller aktif)
+Pipeline: Sequenced — Door Classifier (model012) + 12 Frame Predictor (model011)
+
+
+AMAÇ
+----
+Exp010'da öğrenim gözlemlenirken Exp015'in neden rastgele baseline'da kaldığını anlamak
+ve düzelterek tam zinciri (door + 12 frame) gerçek öğrenimle çalıştırmak.
+
+
+ROOT CAUSE: VERİ SEMANTİĞİ HATASI
+-----------------------------------
+Exp010 tek modüllü bir dataset kullanıyordu (S03D01, sadece osc_a aktif). Her ses
+dosyası doğrudan osc_a çıkışıydı; model "ne duyuyorsam osc_a'dır" mantığıyla
+kolayca öğrenebiliyordu.
+
+Exp015'te ise tüm modüller aktif (S03D15). Bir seste osc_a + osc_b + noise + filter
++ env + lfo + reverb + delay hepsi bir arada çalışıyor. Kod, tüm frame'ler için
+aynı tam karışım ses dosyasını (filename) veriyordu. Yani osc_a modeli:
+  Girdi → 14 katmanlı karmaşık mix
+  Hedef → sadece osc_a parametreleri
+diye eğitiliyordu. Karmaşık karışımdan tek katmanı ayırt etmek imkânsızdı.
+Sonuç: tüm frame'ler MSE ≈ 0.083 (rastgele baseline) civarında takılı kaldı.
+
+
+ÇÖZÜM: RESIDUAL (KÜMÜLATIF) ÖĞRENIM — main_render=frame
+----------------------------------------------------------
+DataGenerator her sample için, katman katman birikimli render dosyaları
+yazıyor (filename_frame01, filename_frame02, ..., filename_frame12).
+  filename_frame01 = sadece osc_a çıkışı
+  filename_frame02 = osc_a + osc_b çıkışı
+  filename_frame05 = osc_a + osc_b + noise + filter + env1 çıkışı
+  ... vb.
+
+Yeni girdi yapısı her frame predictor için:
+  mel_full  → bu katmana kadarki kümülatif render (filename_frameN)
+  mel_prev  → bir önceki katmana kadarki render (filename_frame(N-1))
+  prev_params → bir önceki frame'in tahmin edilen parametreleri
+
+Bu sayede her model, kendi katkısını görebilir hale geldi:
+frame02 modeli "önce osc_a vardı, şimdi osc_a+osc_b var, fark osc_b'dir" diye öğreniyor.
+
+Uygulama: sequenced_dataset.py dosyasına main_render flag'i eklendi.
+Config'de: conditioning.main_render: frame
+Geriye dönük uyumlu: varsayılan "full" (diğer deneyleri etkilemez).
+
+
+CONFIG DEĞİŞİKLİKLERİ (Exp010 hizalaması)
+-------------------------------------------
+Exp015'i Exp010'la aynı hale getirmek için aşağıdaki değerler düzeltildi:
+  features.normalize:           true (eksikti)
+  model.dropout:                0.2 (0.3'tü)
+  model.per_param_loss_weight:  false (true'ydu)
+  model.n_bins:                 kaldırıldı (sadece classification modda kullanılır)
+  conditioning.dropout_p:       0.0 (0.30'du — bilgi saklamaya gerek yok)
+  conditioning.teacher_forcing: kaldırıldı (hiçbir kod okumuyordu, dead config)
+  conditioning.main_render:     frame (YENİ — temel düzeltme)
+  training.epochs:              300
+  training.lr_scheduler:        plateau (cosine'di)
+  training.early_stopping.patience: 40
+  training.num_workers:         4 (8'di)
+  export.auto_export:           false (true'ydu)
+  tüm frame'lerde categorical_params: {} (kategorik kafalar devre dışı, saf regresyon)
+
+
+BASH SCRIPT DEĞİŞİKLİKLİĞİ
+-----------------------------
+Ara git commit'ler kaldırıldı. Eğitim sırasında her frame'den sonra push yapılması
+hem gereksiz hem hata riskli (RunPod'da PAT yoktu). Tek commit+push yalnızca
+tüm eğitim ve evaluation tamamlandıktan sonra yapılıyor.
+
+
+SONUÇLAR — Exp015 Full Run (2026-06-18)
+----------------------------------------
+Random baseline (MSE): ~0.083  (tüm parametrelerin varyansı ortalaması)
+
+DOOR CLASSIFIER (model012):
+  Bypass accuracy (ortalama): %90.9
+    bypass_osc_b:    %92.2
+    bypass_noise:    %98.1
+    bypass_filter:   %96.9
+    bypass_reverb:   %85.5
+    bypass_delay:    %82.0
+  LFO count accuracy: %24.5  ← SORUNLU (5 sınıf, 0-4 arası LFO)
+    LFO sayısı tahmin edilemiyor; confusion matrix dağınık, model yaklaşık olarak
+    ortalamaya çekiyor. Beklenen random baseline: %20. Çok az iyileşme var.
+
+FRAME PREDICTORS (model011, MSE — düşük = iyi):
+  osc_a    MSE=0.029  ← Exp010 ile aynı seviye (0.033). BAŞARILI.
+  osc_b    MSE=0.059  ← Random baseline'ın altında. Öğreniyor. Ama
+                         phase + semitone_ofs ≈ 0.080 (identifiability sorunu;
+                         mix içinde perceptual katkısı yok denecek kadar az)
+  noise    MSE=0.013  ← Çok iyi. noise_color ve noise_level neredeyse mükemmel.
+  filter   MSE=0.052  ← Öğreniyor. filter_drive ve filter_keytrack zor (0.085-0.086)
+  env1     MSE=0.044  ← Öğreniyor. atk_curve ve dec_curve zor (0.076-0.085)
+  env2     MSE=0.060  ← Öğreniyor ama daha gürültülü. sustain zor (0.095)
+  lfo1     MSE=0.100  ← SORUNLU. rate+depth öğreniyor (0.045/0.080) ama
+  lfo2     MSE=0.096    shape ve target ≈ 0.130-0.140 = rastgele baseline.
+  lfo3     MSE=0.091    Neden: lfo_shape ve lfo_target kategorik parametreler
+  lfo4     MSE=0.072    ({0, 1/3, 2/3, 1} = 4 sınıf), MSE ile eğitilince
+                         ortalamayı tahmin etmek optimal oluyor. Varyans ≈ 0.139.
+  reverb   MSE=0.057  ← Öğreniyor. reverb_mix ≈ 0 (çok iyi). size/damping/width zor.
+  delay    MSE=0.048  ← Öğreniyor. delay_mix ≈ 0 (mükemmel). feedback zor (0.094).
+
+
+ÇÖZÜLMEMIŞ SORUNLAR (gelecek deneyler için)
+---------------------------------------------
+1. LFO shape / target: Kategorik parametreler için MSE kayıp fonksiyonu uygunsuz.
+   Çözüm: bu parametreler için kategorik (cross-entropy) kafa açmak.
+   Config'de categorical_params içine lfo*_shape ve lfo*_target eklenecek.
+
+2. LFO count (door): 5 sınıflı sayım tahmini neredeyse rastgele.
+   Olası neden: LFO count ses üzerinde az belirleyici etki bırakıyor.
+
+3. osc_b identifiability: phase ve semitone_ofs perceptual olarak geri kazanılamaz.
+   Bunlar için loss maskeleme veya parametreyi tahmin listesinden çıkarmak düşünülebilir.
+
+
+KARŞILAŞTIRMA ÖZETİ
+---------------------
+                 Exp010       Exp015 (önceki)   Exp015 (bu run)
+osc_a MSE:       0.033        ~0.083 (random)   0.029  ✓
+Dataset:         S03D01       S03D15            S03D15
+Modüller:        sadece osc_a tümü aktif         tümü aktif
+Girdi:           full mix     full mix          frame-by-frame (residual)

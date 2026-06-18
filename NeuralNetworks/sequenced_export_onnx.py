@@ -232,6 +232,7 @@ def export_frame(
         "prev_params_dim":   prev_params_dim,
         "continuous_params": cont_params,
         "categorical_params": cat_params,
+        "conditioning":      cfg.get("conditioning", {}),
         "opset_version":     opset,
     }
     _save_meta(output_path, meta)
