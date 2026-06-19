@@ -1,0 +1,26 @@
+{
+  "frame_name": "lfo2",
+  "model_file": "model011",
+  "input_names": [
+    "mel_full",
+    "mel_prev",
+    "prev_params"
+  ],
+  "output_names": [
+    "continuous_out"
+  ],
+  "n_mels": 128,
+  "prev_params_dim": 47,
+  "continuous_params": [
+    "lfo2_rate",
+    "lfo2_depth",
+    "lfo2_shape",
+    "lfo2_target"
+  ],
+  "categorical_params": {},
+  "conditioning": {
+    "dropout_p": 0.3,
+    "main_render": "full_frame_hint"
+  },
+  "opset_version": 17
+}

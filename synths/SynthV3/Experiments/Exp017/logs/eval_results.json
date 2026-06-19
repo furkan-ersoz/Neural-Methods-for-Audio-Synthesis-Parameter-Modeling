@@ -1,0 +1,676 @@
+{
+  "meta": {
+    "experiment": "Exp017",
+    "dataset_path": "datasets/S03D17",
+    "config_hash": "8838ce93",
+    "evaluated_at": "2026-06-19T00:25:36.718252",
+    "frame": null
+  },
+  "door": {
+    "val_loss": 1.7447196420033773,
+    "bypass_accuracy": {
+      "bypass_osc_b": 0.9293333333333333,
+      "bypass_noise": 0.9843333333333333,
+      "bypass_filter": 0.9716666666666667,
+      "bypass_reverb": 0.881,
+      "bypass_delay": 0.8643333333333333
+    },
+    "overall_bypass_accuracy": 0.9261333333333335,
+    "lfo_count_accuracy": 0.24933333333333332,
+    "lfo_confusion_matrix": [
+      [
+        259,
+        125,
+        82,
+        79,
+        78
+      ],
+      [
+        220,
+        84,
+        90,
+        80,
+        139
+      ],
+      [
+        152,
+        100,
+        91,
+        100,
+        120
+      ],
+      [
+        140,
+        72,
+        114,
+        131,
+        176
+      ],
+      [
+        105,
+        78,
+        76,
+        126,
+        183
+      ]
+    ],
+    "training": {
+      "epochs_run": 87,
+      "best_epoch": 47,
+      "best_val_loss": 1.7447196420033773,
+      "dataset_size": 27000,
+      "hyperparameters": {
+        "learning_rate": 0.001,
+        "batch_size": 32,
+        "dropout": 0.2,
+        "patience": 40,
+        "lr_scheduler": "plateau",
+        "grad_clip": 1.0
+      },
+      "hardware": {
+        "device": "cuda"
+      }
+    },
+    "val": {
+      "loss": 1.7447196420033773,
+      "bypass_accuracy": {
+        "bypass_osc_b": 0.9293333333333333,
+        "bypass_noise": 0.9843333333333333,
+        "bypass_filter": 0.9716666666666667,
+        "bypass_reverb": 0.881,
+        "bypass_delay": 0.8643333333333333
+      },
+      "per_flag_precision": {
+        "bypass_osc_b": 0.926015767131595,
+        "bypass_noise": 0.9860045146726862,
+        "bypass_filter": 0.9723196881091618,
+        "bypass_reverb": 0.8997650743931088,
+        "bypass_delay": 0.8863981762917933
+      },
+      "per_flag_recall": {
+        "bypass_osc_b": 0.9443413729128015,
+        "bypass_noise": 0.9927272727272727,
+        "bypass_filter": 0.9944178628389154,
+        "bypass_reverb": 0.9578991246352647,
+        "bypass_delay": 0.9557558377714052
+      },
+      "per_flag_f1": {
+        "bypass_osc_b": 0.9350887936313533,
+        "bypass_noise": 0.9893544733861834,
+        "bypass_filter": 0.983244628424995,
+        "bypass_reverb": 0.9279224712295578,
+        "bypass_delay": 0.9197713384585058
+      },
+      "lfo_count_accuracy": 0.24933333333333332,
+      "lfo_macro_f1": 0.23979906327188863,
+      "lfo_weighted_f1": 0.24033783239851286,
+      "lfo_confusion_matrix": [
+        [
+          259,
+          125,
+          82,
+          79,
+          78
+        ],
+        [
+          220,
+          84,
+          90,
+          80,
+          139
+        ],
+        [
+          152,
+          100,
+          91,
+          100,
+          120
+        ],
+        [
+          140,
+          72,
+          114,
+          131,
+          176
+        ],
+        [
+          105,
+          78,
+          76,
+          126,
+          183
+        ]
+      ]
+    },
+    "test": {
+      "bypass_accuracy": {
+        "bypass_osc_b": 0.9256666666666666,
+        "bypass_noise": 0.9833333333333333,
+        "bypass_filter": 0.973,
+        "bypass_reverb": 0.892,
+        "bypass_delay": 0.857
+      },
+      "per_flag_precision": {
+        "bypass_osc_b": 0.928226779252111,
+        "bypass_noise": 0.9852678571428571,
+        "bypass_filter": 0.9708057609964967,
+        "bypass_reverb": 0.9066824831949387,
+        "bypass_delay": 0.8744832769635476
+      },
+      "per_flag_recall": {
+        "bypass_osc_b": 0.9367011564211808,
+        "bypass_noise": 0.9923561151079137,
+        "bypass_filter": 0.9976,
+        "bypass_reverb": 0.9630407391852163,
+        "bypass_delay": 0.9607762180016516
+      },
+      "per_flag_f1": {
+        "bypass_osc_b": 0.9324447137231142,
+        "bypass_noise": 0.9887992831541219,
+        "bypass_filter": 0.9840205168672322,
+        "bypass_reverb": 0.9340122199592668,
+        "bypass_delay": 0.9156010230179028
+      },
+      "lfo_count_accuracy": 0.26066666666666666,
+      "lfo_macro_f1": 0.2508025831358896,
+      "lfo_weighted_f1": 0.25130797310352504,
+      "lfo_confusion_matrix": [
+        [
+          268,
+          120,
+          80,
+          73,
+          87
+        ],
+        [
+          216,
+          111,
+          87,
+          107,
+          121
+        ],
+        [
+          145,
+          85,
+          81,
+          106,
+          155
+        ],
+        [
+          132,
+          94,
+          78,
+          134,
+          159
+        ],
+        [
+          105,
+          64,
+          79,
+          125,
+          188
+        ]
+      ]
+    },
+    "latency": {
+      "mean_ms": 55.98965434357524,
+      "std_ms": 41.930571827214536,
+      "device": "cpu",
+      "runs": 500
+    }
+  },
+  "frames": {
+    "osc_a": {
+      "val_loss": 0.027758903226795348,
+      "mse_per_param": {
+        "osc_a_waveform": 0.022632181644439697,
+        "osc_a_warp_amt": 0.049962736666202545,
+        "osc_a_warp_type": 0.017724471166729927,
+        "osc_a_detune": 0.032757751643657684,
+        "osc_a_blend": 0.013672755099833012,
+        "osc_a_pitch_coarse": 0.0025897950399667025,
+        "osc_a_pitch_fine": 0.08399134129285812,
+        "osc_a_level": 0.019141623750329018,
+        "osc_a_harmonic2": 0.017946097999811172,
+        "osc_a_harmonic3": 0.017228391021490097
+      },
+      "mae_per_param": {
+        "osc_a_waveform": 0.11295688152313232,
+        "osc_a_warp_amt": 0.17709223926067352,
+        "osc_a_warp_type": 0.07323644310235977,
+        "osc_a_detune": 0.1229754239320755,
+        "osc_a_blend": 0.07977861166000366,
+        "osc_a_pitch_coarse": 0.03740561008453369,
+        "osc_a_pitch_fine": 0.25134679675102234,
+        "osc_a_level": 0.11875057220458984,
+        "osc_a_harmonic2": 0.11298809945583344,
+        "osc_a_harmonic3": 0.11032085865736008
+      },
+      "overall_mse": 0.027764713391661644,
+      "overall_mae": 0.11968515813350677,
+      "training": {
+        "epochs_run": 293,
+        "best_epoch": 253,
+        "best_val_loss": 0.027711569373806318,
+        "dataset_size": 27000,
+        "hyperparameters": {
+          "learning_rate": 0.001,
+          "batch_size": 32,
+          "dropout": 0.2,
+          "patience": 40,
+          "lr_scheduler": "plateau",
+          "grad_clip": 1.0
+        },
+        "hardware": {
+          "device": "cuda"
+        }
+      }
+    },
+    "osc_b": {
+      "val_loss": 0.06768629513680935,
+      "mse_per_param": {
+        "osc_b_waveform": 0.060243863612413406,
+        "osc_b_warp_amt": 0.08400983363389969,
+        "osc_b_warp_type": 0.09117893874645233,
+        "osc_b_detune": 0.08049353957176208,
+        "osc_b_blend": 0.07009711861610413,
+        "osc_b_pitch_coarse": 0.026801133528351784,
+        "osc_b_pitch_fine": 0.08140232414007187,
+        "osc_b_level": 0.020918123424053192,
+        "osc_b_phase": 0.08807516098022461,
+        "osc_b_semitone_ofs": 0.07363643497228622
+      },
+      "mae_per_param": {
+        "osc_b_waveform": 0.20018184185028076,
+        "osc_b_warp_amt": 0.24951273202896118,
+        "osc_b_warp_type": 0.24433565139770508,
+        "osc_b_detune": 0.23978252708911896,
+        "osc_b_blend": 0.21927490830421448,
+        "osc_b_pitch_coarse": 0.13391141593456268,
+        "osc_b_pitch_fine": 0.24572138488292694,
+        "osc_b_level": 0.12602660059928894,
+        "osc_b_phase": 0.25862032175064087,
+        "osc_b_semitone_ofs": 0.2279326319694519
+      },
+      "overall_mse": 0.06768564879894257,
+      "overall_mae": 0.21452999114990234,
+      "training": {
+        "epochs_run": 142,
+        "best_epoch": 102,
+        "best_val_loss": 0.06626280276936825,
+        "dataset_size": 12493,
+        "hyperparameters": {
+          "learning_rate": 0.001,
+          "batch_size": 32,
+          "dropout": 0.2,
+          "patience": 40,
+          "lr_scheduler": "plateau",
+          "grad_clip": 1.0
+        },
+        "hardware": {
+          "device": "cuda"
+        }
+      }
+    },
+    "noise": {
+      "val_loss": 0.012421240247786045,
+      "mse_per_param": {
+        "noise_color": 0.0014246375067159534,
+        "noise_level": 0.002905270317569375,
+        "noise_stereo": 0.032578058540821075
+      },
+      "mae_per_param": {
+        "noise_color": 0.008731775917112827,
+        "noise_level": 0.04541632905602455,
+        "noise_stereo": 0.15335394442081451
+      },
+      "overall_mse": 0.012302654795348644,
+      "overall_mae": 0.06916734576225281,
+      "training": {
+        "epochs_run": 133,
+        "best_epoch": 93,
+        "best_val_loss": 0.012110747310977716,
+        "dataset_size": 7020,
+        "hyperparameters": {
+          "learning_rate": 0.001,
+          "batch_size": 32,
+          "dropout": 0.2,
+          "patience": 40,
+          "lr_scheduler": "plateau",
+          "grad_clip": 1.0
+        },
+        "hardware": {
+          "device": "cuda"
+        }
+      }
+    },
+    "filter": {
+      "val_loss": 0.05148378200829029,
+      "mse_per_param": {
+        "filter_cutoff": 0.029068488627672195,
+        "filter_resonance": 0.049894068390131,
+        "filter_type": 0.016361720860004425,
+        "filter_drive": 0.08294033259153366,
+        "filter_keytrack": 0.08509118854999542,
+        "filter_env_amt": 0.04365241155028343
+      },
+      "mae_per_param": {
+        "filter_cutoff": 0.14446310698986053,
+        "filter_resonance": 0.18449600040912628,
+        "filter_type": 0.0970274806022644,
+        "filter_drive": 0.23920950293540955,
+        "filter_keytrack": 0.2544156014919281,
+        "filter_env_amt": 0.16620971262454987
+      },
+      "overall_mse": 0.051168035715818405,
+      "overall_mae": 0.18097025156021118,
+      "training": {
+        "epochs_run": 117,
+        "best_epoch": 77,
+        "best_val_loss": 0.05106348830860915,
+        "dataset_size": 4365,
+        "hyperparameters": {
+          "learning_rate": 0.001,
+          "batch_size": 32,
+          "dropout": 0.2,
+          "patience": 40,
+          "lr_scheduler": "plateau",
+          "grad_clip": 1.0
+        },
+        "hardware": {
+          "device": "cuda"
+        }
+      }
+    },
+    "env1": {
+      "val_loss": 0.04238477030253791,
+      "mse_per_param": {
+        "env1_attack": 0.011420384980738163,
+        "env1_hold": 0.03441360592842102,
+        "env1_decay": 0.04109538719058037,
+        "env1_sustain": 0.037384044378995895,
+        "env1_release": 0.010326914489269257,
+        "env1_atk_curve": 0.0780581533908844,
+        "env1_dec_curve": 0.0840182825922966
+      },
+      "mae_per_param": {
+        "env1_attack": 0.05817783996462822,
+        "env1_hold": 0.11167358607053757,
+        "env1_decay": 0.12332519888877869,
+        "env1_sustain": 0.14727559685707092,
+        "env1_release": 0.05300399288535118,
+        "env1_atk_curve": 0.2375257909297943,
+        "env1_dec_curve": 0.25078606605529785
+      },
+      "overall_mse": 0.04238811135292053,
+      "overall_mae": 0.14025257527828217,
+      "training": {
+        "epochs_run": 82,
+        "best_epoch": 42,
+        "best_val_loss": 0.04141442089279493,
+        "dataset_size": 27000,
+        "hyperparameters": {
+          "learning_rate": 0.001,
+          "batch_size": 32,
+          "dropout": 0.2,
+          "patience": 40,
+          "lr_scheduler": "plateau",
+          "grad_clip": 1.0
+        },
+        "hardware": {
+          "device": "cuda"
+        }
+      }
+    },
+    "env2": {
+      "val_loss": 0.055292661979117176,
+      "mse_per_param": {
+        "env2_attack": 0.025067266076803207,
+        "env2_hold": 0.03559832647442818,
+        "env2_decay": 0.04806571453809738,
+        "env2_sustain": 0.04825400933623314,
+        "env2_release": 0.045738864690065384,
+        "env2_atk_curve": 0.09078270196914673,
+        "env2_dec_curve": 0.08887583017349243
+      },
+      "mae_per_param": {
+        "env2_attack": 0.0931292176246643,
+        "env2_hold": 0.11851688474416733,
+        "env2_decay": 0.13029812276363373,
+        "env2_sustain": 0.1679132878780365,
+        "env2_release": 0.13744622468948364,
+        "env2_atk_curve": 0.26045066118240356,
+        "env2_dec_curve": 0.2564072906970978
+      },
+      "overall_mse": 0.05462609976530075,
+      "overall_mae": 0.16630880534648895,
+      "training": {
+        "epochs_run": 116,
+        "best_epoch": 76,
+        "best_val_loss": 0.05354752741560812,
+        "dataset_size": 12493,
+        "hyperparameters": {
+          "learning_rate": 0.001,
+          "batch_size": 32,
+          "dropout": 0.2,
+          "patience": 40,
+          "lr_scheduler": "plateau",
+          "grad_clip": 1.0
+        },
+        "hardware": {
+          "device": "cuda"
+        }
+      }
+    },
+    "lfo1": {
+      "val_loss": 0.1025640278061231,
+      "mse_per_param": {
+        "lfo1_rate": 0.04405825957655907,
+        "lfo1_depth": 0.08317659795284271,
+        "lfo1_shape": 0.14142732322216034,
+        "lfo1_target": 0.14143982529640198
+      },
+      "mae_per_param": {
+        "lfo1_rate": 0.14358417689800262,
+        "lfo1_depth": 0.24870023131370544,
+        "lfo1_shape": 0.3288619816303253,
+        "lfo1_target": 0.33256080746650696
+      },
+      "overall_mse": 0.1025255024433136,
+      "overall_mae": 0.263426810503006,
+      "training": {
+        "epochs_run": 43,
+        "best_epoch": 3,
+        "best_val_loss": 0.09930422067891603,
+        "dataset_size": 21517,
+        "hyperparameters": {
+          "learning_rate": 0.001,
+          "batch_size": 32,
+          "dropout": 0.2,
+          "patience": 40,
+          "lr_scheduler": "plateau",
+          "grad_clip": 1.0
+        },
+        "hardware": {
+          "device": "cuda"
+        }
+      }
+    },
+    "lfo2": {
+      "val_loss": 0.10573016719094344,
+      "mse_per_param": {
+        "lfo2_rate": 0.045769572257995605,
+        "lfo2_depth": 0.08354286849498749,
+        "lfo2_shape": 0.144820898771286,
+        "lfo2_target": 0.14926235377788544
+      },
+      "mae_per_param": {
+        "lfo2_rate": 0.13889865577220917,
+        "lfo2_depth": 0.25071170926094055,
+        "lfo2_shape": 0.3358105719089508,
+        "lfo2_target": 0.3401450514793396
+      },
+      "overall_mse": 0.10584892332553864,
+      "overall_mae": 0.26639148592948914,
+      "training": {
+        "epochs_run": 44,
+        "best_epoch": 4,
+        "best_val_loss": 0.1026695487228185,
+        "dataset_size": 16016,
+        "hyperparameters": {
+          "learning_rate": 0.001,
+          "batch_size": 32,
+          "dropout": 0.2,
+          "patience": 40,
+          "lr_scheduler": "plateau",
+          "grad_clip": 1.0
+        },
+        "hardware": {
+          "device": "cuda"
+        }
+      }
+    },
+    "lfo3": {
+      "val_loss": 0.10480182819269798,
+      "mse_per_param": {
+        "lfo3_rate": 0.04321622848510742,
+        "lfo3_depth": 0.08263502269983292,
+        "lfo3_shape": 0.145135760307312,
+        "lfo3_target": 0.14822030067443848
+      },
+      "mae_per_param": {
+        "lfo3_rate": 0.1369704157114029,
+        "lfo3_depth": 0.24750946462154388,
+        "lfo3_shape": 0.3339322507381439,
+        "lfo3_target": 0.33103278279304504
+      },
+      "overall_mse": 0.10480181872844696,
+      "overall_mae": 0.26236122846603394,
+      "training": {
+        "epochs_run": 43,
+        "best_epoch": 3,
+        "best_val_loss": 0.09884707388040181,
+        "dataset_size": 10656,
+        "hyperparameters": {
+          "learning_rate": 0.001,
+          "batch_size": 32,
+          "dropout": 0.2,
+          "patience": 40,
+          "lr_scheduler": "plateau",
+          "grad_clip": 1.0
+        },
+        "hardware": {
+          "device": "cuda"
+        }
+      }
+    },
+    "lfo4": {
+      "val_loss": 0.10830956187687422,
+      "mse_per_param": {
+        "lfo4_rate": 0.04365140572190285,
+        "lfo4_depth": 0.08578810840845108,
+        "lfo4_shape": 0.15230244398117065,
+        "lfo4_target": 0.15347439050674438
+      },
+      "mae_per_param": {
+        "lfo4_rate": 0.14610423147678375,
+        "lfo4_depth": 0.25240927934646606,
+        "lfo4_shape": 0.3428283929824829,
+        "lfo4_target": 0.3438553214073181
+      },
+      "overall_mse": 0.10880408436059952,
+      "overall_mae": 0.27129927277565,
+      "training": {
+        "epochs_run": 42,
+        "best_epoch": 2,
+        "best_val_loss": 0.10084426836278386,
+        "dataset_size": 5251,
+        "hyperparameters": {
+          "learning_rate": 0.001,
+          "batch_size": 32,
+          "dropout": 0.2,
+          "patience": 40,
+          "lr_scheduler": "plateau",
+          "grad_clip": 1.0
+        },
+        "hardware": {
+          "device": "cuda"
+        }
+      }
+    },
+    "reverb": {
+      "val_loss": 0.06222207118806086,
+      "mse_per_param": {
+        "reverb_size": 0.09096725285053253,
+        "reverb_decay": 0.0472395196557045,
+        "reverb_damping": 0.08407039940357208,
+        "reverb_predelay": 0.05509570986032486,
+        "reverb_mix": 2.2106223696027882e-07,
+        "reverb_width": 0.09599807113409042
+      },
+      "mae_per_param": {
+        "reverb_size": 0.25943538546562195,
+        "reverb_decay": 0.15766456723213196,
+        "reverb_damping": 0.24976374208927155,
+        "reverb_predelay": 0.17379161715507507,
+        "reverb_mix": 0.0003039820003323257,
+        "reverb_width": 0.2650456130504608
+      },
+      "overall_mse": 0.06222853064537048,
+      "overall_mae": 0.1843341588973999,
+      "training": {
+        "epochs_run": 48,
+        "best_epoch": 8,
+        "best_val_loss": 0.05737971529265903,
+        "dataset_size": 5436,
+        "hyperparameters": {
+          "learning_rate": 0.001,
+          "batch_size": 32,
+          "dropout": 0.2,
+          "patience": 40,
+          "lr_scheduler": "plateau",
+          "grad_clip": 1.0
+        },
+        "hardware": {
+          "device": "cuda"
+        }
+      }
+    },
+    "delay": {
+      "val_loss": 0.04486605669889185,
+      "mse_per_param": {
+        "delay_time_l": 0.04499519243836403,
+        "delay_time_r": 0.04067061468958855,
+        "delay_feedback": 0.09087952226400375,
+        "delay_filter_cutoff": 0.04833986237645149,
+        "delay_mix": 1.0863764146051835e-06
+      },
+      "mae_per_param": {
+        "delay_time_l": 0.13646280765533447,
+        "delay_time_r": 0.14359506964683533,
+        "delay_feedback": 0.25236645340919495,
+        "delay_filter_cutoff": 0.1462734043598175,
+        "delay_mix": 0.0008206591010093689
+      },
+      "overall_mse": 0.04497725889086723,
+      "overall_mae": 0.13590368628501892,
+      "training": {
+        "epochs_run": 42,
+        "best_epoch": 2,
+        "best_val_loss": 0.041482197094551275,
+        "dataset_size": 5114,
+        "hyperparameters": {
+          "learning_rate": 0.001,
+          "batch_size": 32,
+          "dropout": 0.2,
+          "patience": 40,
+          "lr_scheduler": "plateau",
+          "grad_clip": 1.0
+        },
+        "hardware": {
+          "device": "cuda"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "frame_name": "delay",
+  "model_file": "model011",
+  "input_names": [
+    "mel_full",
+    "mel_prev",
+    "prev_params"
+  ],
+  "output_names": [
+    "continuous_out"
+  ],
+  "n_mels": 128,
+  "prev_params_dim": 65,
+  "continuous_params": [
+    "delay_time_l",
+    "delay_time_r",
+    "delay_feedback",
+    "delay_filter_cutoff",
+    "delay_mix"
+  ],
+  "categorical_params": {},
+  "conditioning": {
+    "dropout_p": 0.3,
+    "main_render": "full_frame_hint"
+  },
+  "opset_version": 17
+}

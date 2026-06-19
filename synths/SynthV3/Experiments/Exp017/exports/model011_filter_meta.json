@@ -1,0 +1,28 @@
+{
+  "frame_name": "filter",
+  "model_file": "model011",
+  "input_names": [
+    "mel_full",
+    "mel_prev",
+    "prev_params"
+  ],
+  "output_names": [
+    "continuous_out"
+  ],
+  "n_mels": 128,
+  "prev_params_dim": 23,
+  "continuous_params": [
+    "filter_cutoff",
+    "filter_resonance",
+    "filter_type",
+    "filter_drive",
+    "filter_keytrack",
+    "filter_env_amt"
+  ],
+  "categorical_params": {},
+  "conditioning": {
+    "dropout_p": 0.3,
+    "main_render": "full_frame_hint"
+  },
+  "opset_version": 17
+}

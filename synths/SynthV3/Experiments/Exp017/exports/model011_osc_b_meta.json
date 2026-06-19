@@ -1,0 +1,32 @@
+{
+  "frame_name": "osc_b",
+  "model_file": "model011",
+  "input_names": [
+    "mel_full",
+    "mel_prev",
+    "prev_params"
+  ],
+  "output_names": [
+    "continuous_out"
+  ],
+  "n_mels": 128,
+  "prev_params_dim": 10,
+  "continuous_params": [
+    "osc_b_waveform",
+    "osc_b_warp_amt",
+    "osc_b_warp_type",
+    "osc_b_detune",
+    "osc_b_blend",
+    "osc_b_pitch_coarse",
+    "osc_b_pitch_fine",
+    "osc_b_level",
+    "osc_b_phase",
+    "osc_b_semitone_ofs"
+  ],
+  "categorical_params": {},
+  "conditioning": {
+    "dropout_p": 0.3,
+    "main_render": "full_frame_hint"
+  },
+  "opset_version": 17
+}

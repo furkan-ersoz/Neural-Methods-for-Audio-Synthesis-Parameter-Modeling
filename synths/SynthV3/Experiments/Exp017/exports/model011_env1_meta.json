@@ -1,0 +1,29 @@
+{
+  "frame_name": "env1",
+  "model_file": "model011",
+  "input_names": [
+    "mel_full",
+    "mel_prev",
+    "prev_params"
+  ],
+  "output_names": [
+    "continuous_out"
+  ],
+  "n_mels": 128,
+  "prev_params_dim": 29,
+  "continuous_params": [
+    "env1_attack",
+    "env1_hold",
+    "env1_decay",
+    "env1_sustain",
+    "env1_release",
+    "env1_atk_curve",
+    "env1_dec_curve"
+  ],
+  "categorical_params": {},
+  "conditioning": {
+    "dropout_p": 0.3,
+    "main_render": "full_frame_hint"
+  },
+  "opset_version": 17
+}
